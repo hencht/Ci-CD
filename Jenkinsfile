@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('echo') {
       steps {
-        echo 'hello new trigger to smee'
+        echo 'hello blah new trigger to smee'
       }
     }
    }
