@@ -6,4 +6,5 @@ pipeline {
         echo 'hello new :trigger smee'
       }
     }
+   }
 }
