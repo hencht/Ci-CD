@@ -1,5 +1,9 @@
 pipeline {
   agent any
+  parameters {
+      choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description '')
+      boolenanParam(name: 'executeTests', defaultValue: true, description: '')
+  }
   stages {
     stage("build") {
       steps {
@@ -8,6 +12,12 @@ pipeline {
     }
     
     stage("test") {
+        when {
+            expression {
+                BRANCH_NAME == 'dev'  || BRANCH_NAME == 'master'
+                params.executeTests
+            }
+        }
       steps {
         echo 'Testing the application...'
       }
@@ -16,6 +26,7 @@ pipeline {
     stage("deploy") {
       steps {
         echo 'Deploying the application...'
+        echo "Deploying ${params.VERSION}"
       }
     }
   }
