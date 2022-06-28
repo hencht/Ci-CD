@@ -21,6 +21,15 @@ pipeline {
         }
       }
     }
+
+    stage('Add Config files') {
+        steps {
+            configFileProvider([configFile(fileId: 'app-version', variable: 'APP-VERSION')]) {
+            sh "cat \$APP-VERSION "
+            }
+           
+        }
+ }
     
     stage("test") {
         when {
