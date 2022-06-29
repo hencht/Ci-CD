@@ -1,13 +1,59 @@
+def gv
 pipeline {
   agent any
-  triggers {
-    cron('H/15 * * * *')
+  parameters {
+      choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
+      booleanParam(name: 'executeTests', defaultValue: true, description: '')
   }
   stages {
-    stage('echo') {
+    stage("init") {
       steps {
-        echo 'Triggered'
+        script {
+          gv = load "script.groovy"
+        }
       }
     }
-   }
+    
+    stage("build") {
+      steps {
+        script {
+          gv.buildApp()
+        }
+      }
+    }
+
+    stage('Add Config files') {
+        steps {
+            configFileProvider([configFile(fileId: 'app-version', variable: 'APP-VERSION')]) {
+            sh "cat \$APP-VERSION"
+
+            }
+           
+        }
+    }
+    
+    stage("test") {
+        when {
+            expression {
+                BRANCH_NAME == 'dev'  || BRANCH_NAME == 'master'
+                params.executeTests
+            }
+        }
+      steps {
+        script {
+          gv.testApp()
+        }
+      }
+    }
+    
+    stage("deploy") {
+      steps {
+        script {
+          gv.deployApp()
+        }
+      }
+    }
+  }
 }
+
+
