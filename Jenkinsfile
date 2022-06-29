@@ -24,8 +24,10 @@ pipeline {
 
     stage('Add Config files') {
         steps {
-            configFileProvider([configFile(fileId: 'app-version', variable: 'APP-VERSION')]) {
-            sh "cat \$APP-VERSION"
+            configFileProvider([configFile(fileId: 'app-version', variable: 'APP_VERSION')]) {
+            echo " =========== ^^^^^^^^^^^^ Reading config from pipeline script "
+            sh "cat ${env.APP_VERSION}"
+            echo "============= ~~~~~~~~~~~ =============="
 
             }
            
