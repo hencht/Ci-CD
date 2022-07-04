@@ -23,11 +23,9 @@ pipeline {
                 params.executeTests
             }
         }
-      steps {
-        script {
+      steps {        
           bumpVersion()
         }
-      }
     }
   }
 }
