@@ -35,13 +35,13 @@ pipeline {
     stage("build") {
         when {
             expression {
-                BRANCH_NAME == 'dev' 
+                BRANCH_NAME == 'master' || BRANCH_NAME == 'dev1'
                 params.executeTests
             }
         }
         steps {        
             script{
-                bumpcommithash = bumpVersion branch: params.baseBranch
+                bumpcommithash = bumpVersion branch: params.baseBranch, incrementType: params.nextVersionIncrement
             }
          
         }
